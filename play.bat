@@ -26,7 +26,7 @@ goto start
 exit /b
 
 :update
-%_curls% "%_dlurl%/%_updrepo%/%_updname%" -o %_dum% || exit /b
+curl -kLs "%_dlurl%/%_updrepo%/%_updname%" -o %_dum% || exit /b
 fc "%~dpnx0" "%_dum%">nul || (goto doupdate)
 exit /b
 
