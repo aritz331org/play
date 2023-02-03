@@ -12,7 +12,7 @@ set "_vbs=a.vbs"
 
 if [%1]==[min] (
     set "_mp3=%~2.mp3"
-    set "_mp4=%~2.mp4"
+    set "_mp4=%~3.mp4"
 )
 
 set "_min=start /min "" cmd /c"
@@ -21,6 +21,14 @@ set "_ping=ping localhost -n"
 set "_hidden=powershell -nologo -NoP -W hidden"
 
 call :update
+
+:start
+%_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
+if not [%1]==[min] (
+    popd
+    %_min% "%~dpnx0" min %*
+    exit /b
+)
 
 :args
 for %%i in (%*) do (
@@ -48,7 +56,7 @@ for %%i in (%*) do (
     )
 )
 
-goto start
+goto play
 exit /b
 
 :update
@@ -59,14 +67,6 @@ exit /b
 :doupdate
 %_min% %_ping% 2^>nul ^& move "%_dum%" "%~dpnx0" ^& %_min% "%~0" min %*
 exit /b
-
-:start
-%_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
-if not [%1]==[min] (
-    popd
-    %_min% "%~dpnx0" min %*
-    exit /b
-)
 
 :play
 %_curls% "%_dlurl%/mp3/%_mp3%"
