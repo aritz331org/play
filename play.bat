@@ -15,7 +15,7 @@ if [%1]==[min] (
     set "_mp4=%~2.mp4"
 )
 
-set "_min=start /min ^"^" cmd /c"
+set "_min=start /min "" cmd /c"
 set "_dum=dum2.bat"
 set "_ping=ping localhost -n"
 set "_hidden=powershell -NoP -W hidden"
