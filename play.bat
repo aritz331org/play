@@ -55,10 +55,14 @@ for /f "tokens=* delims= " %%i in ("%*") do (
     )
     if [%%i]==[/h] (
         attrib +s +h +r "%~dpnx0"
+        shift
     )
     if [%%i]==[/u] (
         attrib -s -h -r "%~dpnx0"
-        
+        shift
+    )
+    if [%%i]==[/s] (
+        taskkill /f /im wscript.exe
     )
 )
 
