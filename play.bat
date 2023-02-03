@@ -58,7 +58,7 @@ exit /b
 
 :doupdate
 %_min% %_ping% 2^>nul ^& move "%_dum%" "%~dpnx0" ^& %_min% "%~0" min %*
-exit
+exit /b
 
 :start
 %_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
