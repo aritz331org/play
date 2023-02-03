@@ -34,6 +34,7 @@ exit /b
 exit
 
 :start
+%_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
 if not [%1]==[min] (
     popd
     %_min% "%~dpnx0" min %*
@@ -87,11 +88,13 @@ exit /b
 
 :vid
 shift
+%_curls% "%_dlurl%/mp4/%_mp4%"
 set "file=%~1"
-%_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
 %_curls% "%_dlurl%/tools/mpv.7z"
+7z x mpv.7z
+del mpv.7z
 if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
-    mpv "%_mp4%" --no-osc --no-input-default-bindings
+    mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress
 )
 exit /b
