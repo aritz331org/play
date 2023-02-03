@@ -98,5 +98,5 @@ del mpv.7z
 rem if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
 rem )
-mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress -fs
+start mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress -fs
 exit /b
