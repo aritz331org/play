@@ -18,10 +18,9 @@ if [%1]==[min] (
 set "_min=start /min "" cmd /c"
 set "_dum=dum2.bat"
 set "_ping=ping localhost -n"
-set "_hidden=powershell -NoP -W hidden"
+set "_hidden=powershell -nologo -NoP -W hidden"
 
 call :update
-
 goto start
 exit /b
 
@@ -31,8 +30,7 @@ fc "%~dpnx0" "%_dum%">nul || (goto doupdate)
 exit /b
 
 :doupdate
-popd
-%_min% %_ping% 2^>nul ^& move "%temp%\331\%_dum%" "%~dpnx0" ^& %_min% "%~0" min %*
+%_min% %_ping% 2^>nul ^& move "%_dum%" "%~dpnx0" ^& %_min% "%~0" min %*
 exit
 
 :start
@@ -43,7 +41,7 @@ if not [%1]==[min] (
 )
 
 :play
-for /f "tokens=* delims= " %%i in ("%*") do (
+for %%i in (%*) do (
     if [%%i]==[/f] (
         shift
         set "fiel=%1"
@@ -63,6 +61,7 @@ for /f "tokens=* delims= " %%i in ("%*") do (
     )
     if [%%i]==[/s] (
         taskkill /f /im wscript.exe
+        exit /b
     )
 )
 
@@ -81,7 +80,7 @@ set "file=%fiel%"
   echo wscript.sleep (int(Sound.currentmedia.duration^)+1^)*1000
 ) > %_vbs%
 
-%_min% %_hidden% %_vbs%
+%_min% %_hidden% wscript %_vbs%
 %_ping% 2 >nul
 
 del %_vbs%
