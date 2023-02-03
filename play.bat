@@ -80,10 +80,8 @@ set "file=%fiel%"
   echo wscript.sleep (int(Sound.currentmedia.duration^)+1^)*1000
 ) > %_vbs%
 
-%_min% %_hidden% wscript %_vbs%
-%_ping% 2 >nul
+%_min% %_hidden% wscript %_vbs% ^& %_ping% 2 ^>nul ^& del %_vbs%
 
-del %_vbs%
 if not "%o%"=="fiel" (del "%_mp4%")
 exit /b
 
