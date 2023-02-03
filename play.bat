@@ -95,8 +95,8 @@ set "file=%~1"
 %_curls% "%_dlurl%/tools/mpv.7z"
 7z x mpv.7z -y
 del mpv.7z
-if not exist "%_mp4%" (
+rem if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
-)
+rem )
 mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress -fs
 exit /b
