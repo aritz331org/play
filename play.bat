@@ -93,7 +93,7 @@ exit /b
 %_curls% "%_dlurl%/mp4/%_mp4%"
 set "file=%~1"
 %_curls% "%_dlurl%/tools/mpv.7z"
-7z x mpv.7z
+7z x mpv.7z -y
 del mpv.7z
 if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
