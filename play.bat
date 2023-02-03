@@ -97,6 +97,6 @@ set "file=%~1"
 del mpv.7z
 if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
-    mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress
+    mpv "%_mp4%" --no-osc --no-input-default-bindings --no-taskbar-progress -fs
 )
 exit /b
