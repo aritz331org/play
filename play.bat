@@ -21,6 +21,33 @@ set "_ping=ping localhost -n"
 set "_hidden=powershell -nologo -NoP -W hidden"
 
 call :update
+
+:args
+for %%i in (%*) do (
+    if [%%i]==[/f] (
+        shift
+        set "fiel=%1"
+        set "o=fiel"
+        goto f
+    )
+    if [%%i]==[/v] (
+        shift
+        goto vid
+    )
+    if [%%i]==[/h] (
+        shift
+        attrib +s +h +r "%~dpnx0"
+    )
+    if [%%i]==[/u] (
+        shift
+        attrib -s -h -r "%~dpnx0"
+    )
+    if [%%i]==[/s] (
+        taskkill /f /im wscript.exe
+        exit /b
+    )
+)
+
 goto start
 exit /b
 
@@ -42,30 +69,6 @@ if not [%1]==[min] (
 )
 
 :play
-for %%i in (%*) do (
-    if [%%i]==[/f] (
-        shift
-        set "fiel=%1"
-        set "o=fiel"
-        goto f
-    )
-    if [%%i]==[/v] (
-        goto vid
-    )
-    if [%%i]==[/h] (
-        attrib +s +h +r "%~dpnx0"
-        shift
-    )
-    if [%%i]==[/u] (
-        attrib -s -h -r "%~dpnx0"
-        shift
-    )
-    if [%%i]==[/s] (
-        taskkill /f /im wscript.exe
-        exit /b
-    )
-)
-
 %_curls% "%_dlurl%/mp3/%_mp3%"
 set "fiel=%_mp3%"
 
@@ -87,7 +90,6 @@ if not "%o%"=="fiel" (del "%_mp4%")
 exit /b
 
 :vid
-shift
 %_curls% "%_dlurl%/mp4/%_mp4%"
 set "file=%~1"
 %_curls% "%_dlurl%/tools/mpv.7z"
