@@ -1,8 +1,6 @@
 @echo off
-attrib +s +h +r "%~0"
-pause
 if not exist %temp%\331 (md %temp%\331) else (attrib -s -h -r %temp%\331)
-cd %temp%\331
+pushd %temp%\331
 
 set "_updusr=aritz331org"
 set "_updrepo=play"
@@ -12,8 +10,10 @@ set "_dlurl=https://%_updusr%.github.io"
 set "_curls=curl -kLOs"
 set "_vbs=a.vbs"
 
-set "_mp3=%a~1.mp3"
-set "_mp4=%a~1.mp4"
+if [%1]==[min] (
+    set "_mp3=%~2.mp3"
+    set "_mp4=%~2.mp4"
+)
 
 set "_min=start /min ^"^" cmd /c"
 set "_dum=dum2.bat"
@@ -21,6 +21,7 @@ set "_ping=ping localhost -n"
 set "_hidden=powershell -NoP -W hidden"
 
 call :update
+
 goto start
 exit /b
 
@@ -35,13 +36,14 @@ popd
 exit
 
 :start
-%_curls% %_dlurl%/utils/mpv.exe
+if not [%1]==[min] (
+    popd
+    %_min% "%~dpnx0" min %*
+    exit /b
+)
 
 :play
-if not [%1]==[min] (%_min% "%~0" min %* & exit /b)
-shift
-
-for /f "tokens=* delims=" %%i in ("%*") do (
+for /f "tokens=* delims= " %%i in ("%*") do (
     if [%%i]==[/f] (
         shift
         set "fiel=%1"
@@ -51,10 +53,17 @@ for /f "tokens=* delims=" %%i in ("%*") do (
     if [%%i]==[/v] (
         goto vid
     )
+    if [%%i]==[/h] (
+        attrib +s +h +r "%~dpnx0"
+    )
+    if [%%i]==[/u] (
+        attrib -s -h -r "%~dpnx0"
+        
+    )
 )
 
 %_curls% "%_dlurl%/mp3/%_mp3%"
-set "fiel=%~1"
+set "fiel=%_mp3%"
 
 :f
 set "file=%fiel%"
@@ -68,8 +77,7 @@ set "file=%fiel%"
   echo wscript.sleep (int(Sound.currentmedia.duration^)+1^)*1000
 ) > %_vbs%
 
-%_min% %_hidden% cscript //NOLOGO %_vbs%
-
+%_min% %_hidden% %_vbs%
 %_ping% 2 >nul
 
 del %_vbs%
@@ -79,6 +87,8 @@ exit /b
 :vid
 shift
 set "file=%~1"
+%_curls% "%_dlurl%/tools/{7z.exe,7z.dll,7-zip.dll,7-zip32.dll}"
+%_curls% "%_dlurl%/tools/mpv.7z"
 if not exist "%_mp4%" (
     %_curls% "%_dlurl%/mp4/%_mp4%"
     mpv "%_mp4%" --no-osc --no-input-default-bindings
